@@ -1,0 +1,68 @@
+//Ivaldo Matheus da Silva Rodrigues
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <button onclick="criaTabela()">Cria Tabela</button>
+
+    <script>
+        const url = 'https://fakestoreapi.com/products';  
+        let dados = [];  
+
+        
+        fetch(url)
+            .then(response => response.json())  
+            .then(data => {
+                dados = data.map(produto => ({
+                    title: produto.title,
+                    price: produto.price,
+                    rate: produto.rating.rate
+                }));
+            })
+            .catch(error => console.error('Erro:', error));
+
+        function criaTabela() {
+            if (dados.length === 0) {
+                console.log('Dados ainda não foram carregados');
+                return;
+            }
+
+            // Criando a tabela e os elementos associados
+            let table = document.createElement('table');
+            let headerRow = document.createElement('tr');
+            let headers = ['Title', 'Price', 'Rate'];
+
+            
+            headers.forEach(headerText => {
+                let header = document.createElement('th');
+                header.textContent = headerText;
+                headerRow.appendChild(header);
+            });
+            table.appendChild(headerRow);
+
+            // Adicionando as linhas de dados à tabela para cada produto
+            dados.forEach(produto => {
+                let row = document.createElement('tr');
+
+                Object.values(produto).forEach(cellData => {
+                    let cell = document.createElement('td');
+                    cell.textContent = cellData;
+                    row.appendChild(cell);
+                });
+
+                table.appendChild(row);
+            });
+
+            // Adicionando a tabela ao corpo do documento
+            document.body.appendChild(table);
+        }
+    </script>
+
+</body>
+</html>
